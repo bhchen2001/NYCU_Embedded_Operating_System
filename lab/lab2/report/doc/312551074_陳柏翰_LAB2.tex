@@ -1,0 +1,357 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stylish Curriculum Vitae
+% LaTeX Template
+% Version 1.1 (September 10, 2021)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Authors:
+% Stefano (https://www.kindoblue.nl)
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% !TEX program = xelatex
+\documentclass[a4paper, oneside, final, 12pt]{scrartcl} % Paper options using the scrartcl class
+
+\usepackage{fontspec} % for other font
+\usepackage{xeCJK} % for chinese font
+\usepackage{hyperref} % for hyper web link
+\usepackage{multirow} % for tabular table in learning progress
+\usepackage{graphicx} % for image insersion
+\usepackage[export]{adjustbox} % for image frame
+\usepackage{setspace}
+\usepackage{array}
+% Define typographic struts, as suggested by Claudio Beccari
+%   in an article in TeX and TUG News, Vol. 2, 1993.
+\usepackage{mathptmx}
+\usepackage{scrlayer-scrpage} % Provides headers and footers configuration
+\usepackage{titlesec} % Allows creating custom \section's
+\usepackage{marvosym} % Allows the use of symbols
+\usepackage{tabularx,colortbl} % Advanced table configurations
+% \usepackage{ebgaramond} % Use the EB Garamond font
+\usepackage{microtype} % To enable letterspacing
+\usepackage{pdfpages} % for showing pdf
+\usepackage{pdflscape}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{listings}   % highlight the python code
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{cite} %Imports biblatex package
+\usepackage[ruled,linesnumbered]{algorithm2e}
+\newcommand\mycommfont[1]{\normalsize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+% \usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{bibtex}
+% \addbibresource{reference.bib}
+% setup the margin
+\usepackage[top=1cm, bottom=1cm, right=2cm, left=2cm]{geometry}
+
+% set the style of listing code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=true,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% set chinese and english font
+\setmainfont{Times New Roman}
+\setCJKmainfont[AutoFakeBold=true, AutoFakeSlant=true]{AR PL KaitiM Big5}
+
+\titleformat{\section}{\Large\raggedright\bfseries}{}{0em}{}[\titlerule] % Section formatting
+\titleformat{\subsection}{\large\raggedright\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\raggedright\bfseries}{}{0em}{}
+
+% \pagestyle{scrheadings} % Print the headers and footers on all pages
+
+% enable bold and slant chinese font
+% \xeCJKsetup{AutoFakeBold=true, AutoFakeSlant=true}
+
+% set the space at the front of paragraph
+\setlength{\parindent}{2em}
+
+% disable page number
+\pagenumbering{gobble}
+
+\newcommand{\gray}{\rowcolor[gray]{.90}} % Custom highlighting for the work experience and education sections
+\newcommand{\Tstrut}{\rule{0pt}{2.6ex}}         % = `top' strut
+\newcommand{\Bstrut}{\rule[-0.9ex]{0pt}{0pt}}   % = `bottom' strut
+\newcommand{\Tstruth}{\rule{0pt}{4ex}}         % = `top' strut for header
+\newcommand{\Bstruth}{\rule[-2.5ex]{0pt}{0pt}}   % = `bottom' strut for header
+
+%----------------------------------------------------------------------------------------
+%	FOOTER SECTION
+%----------------------------------------------------------------------------------------
+
+% \renewcommand{\headfont}{\normalfont\rmfamily\scshape} % Font settings for footer
+
+% \cofoot{
+% \fontsize{12.5}{17}\selectfont % Letter spacing and font size
+
+% \textls[150]{123 Broadway {\large\textperiodcentered} City {\large\textperiodcentered} Country 12345}\\ % Your mailing address
+% {\Large\Letter} \textls[150]{john@smith.com \ {\Large\Telefon} (000) 111-1111} % Your email address and phone number
+% }
+
+%----------------------------------------------------------------------------------------
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	HEADER SECTION
+%----------------------------------------------------------------------------------------
+
+
+\begin{center}
+    {\fontsize{18}{30}\textbf{Embedded Operating System Lab2 Report}}
+\end{center}
+
+\begin{center}
+  Bo-Han Chen (陳柏翰) \\
+  Student ID:312551074 \\
+  bhchen312551074.cs12@nycu.edu.twa
+\end{center}
+
+\section{Q1. Shrink the size of your kernel image. \\ Q2: Benchmark your kernel, revise it, and improve its performance. Rerun the
+benchmark to prove your performance.}
+
+\begingroup
+\raggedright
+
+\subsection{Shrink kernel image size - \lstinline{myconfig_1.0}}
+
+為了縮小 kernel 的大小，我先透過關閉一些不必要的功能和模組來實現，
+本次 Lab 使用 \lstinline{bcm2711_defconfig} 作為預設的設定檔和後續比較大小的對象，
+並透過 \lstinline{make menuconfig} 來進行設定。
+在第一次嘗試中，我在 \lstinline{make menuconfig} 提供的 \lstinline{Device Driver} 選項中，
+關閉了以下不須用到的模組:
+\begin{itemize}
+  \item \lstinline{Input Device support}
+  \begin{itemize}
+    \item \lstinline{Joysticks/Gamepads}
+    \item \lstinline{Keyboards}
+    \item \lstinline{Mouse interface}
+    \item \lstinline{Touchscreens}
+    \item \lstinline{Miscellaneous devices}
+  \end{itemize}
+  \item \lstinline{Multimedia support}
+  \item \lstinline{Graphics support}
+  \item \lstinline{Sound card support}
+\end{itemize}
+
+因為 \lstinline{make menuconfig} 提供的選項非常多，沒辦法一一確認關閉後是否會對系統造成影響，
+所以我參考了 \href{https://elinux.org/Kernel_Size_Tuning_Guide}{Kernel Size Tuning Guide}網站，
+裡面提供了 \href{https://elinux.org/Linux_Tiny}{Linux-tiny} (一個專門用來縮小 kernel 大小的專案)
+和預設設定檔的差異。另外網站中也提到了可以使用 \lstinline{nm --size -r vmlinux} 
+來取得 kernel 中占用較多容量的符號 (symbol)，因此我先取得了 \lstinline{bcm2711_defconfig}
+容量前 10 大的符號:
+
+\begin{lstlisting}{language=bash}
+  $ nm --size -r vmlinux.bcm2711_defconfig | head -10
+  0000000000058000 d _printk_rb_static_infos
+  0000000000040000 b fscache_cookie_hash
+  0000000000038630 B g_state
+  0000000000020000 b __log_buf
+  0000000000018000 d _printk_rb_static_descs
+  0000000000010000 b stack_slabs
+  0000000000009000 B cpu_topology
+  0000000000008000 d ftrace_stacks
+  0000000000007620 d sys_reg_descs
+  0000000000006000 b memblock_memory_init_regions
+\end{lstlisting}
+
+
+可以看到與 \lstinline{printk} 相關的符號佔用了很大的空間，因此可以根據以上資訊關閉了下列選項:
+
+\begin{itemize}
+  \item \lstinline{CONFIG_PRINTK}
+  \item \lstinline{CONFIG_BUG}
+  \item \lstinline{CONFIG_ELF_CORE}
+  \item \lstinline{CONFIG_AIO}
+  \item \lstinline{CONFIG_SHMEM}
+  \item \lstinline{CONFIG_POSIX_MQUEUE}
+  \item \lstinline{CONFIG_LOG_BUF_SHIFT}
+  \item \lstinline{CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE}
+  \item \lstinline{CONFIG_SCSI}
+\end{itemize}
+
+並開啟
+
+\begin{itemize}
+  \item \lstinline{CONFIG_CC_OPTIMIZE_FOR_SIZE}
+\end{itemize}
+
+透過這些設定，kernel 大小可以從原先 \lstinline{2711_defconfig} 的 23MB (23589376 bytes)
+縮小到 \lstinline{myconfig_1.0} 的 19M (19390976 bytes)。
+
+\subsection{Benchmark the kernel}
+
+我使用了 \href{https://github.com/kdlucas/byte-unixbench}{Unixbench}
+來進行系統效能測試，每次測試都包含下列項目並進行單執行緒和多(4)執行緒的測試:
+
+\begin{itemize}
+  \item Dhrystone 2 using register variables
+  \item Double-Precision Whetstone
+  \item Execl Throughput
+  \item File Copy (30 seconds)
+  \item Pipe Throughput
+  \item Pipe-based Context Switching
+  \item Process Creation
+  \item Shell Scripts (1 concurrent)
+  \item Shell Scripts (8 concurrent)
+  \item System Call Overhead
+  \item System Benchmarks Index Score
+\end{itemize}
+
+Unixbench 會根據這些項目的測試結果，計算出單核和多核兩個分數，分數越高代表效能越好。
+接下來我測試了原先 \lstinline{bcm2711_defconfig} 和經過縮小後的 \lstinline{myconfig_1.0} 的效能，
+結果如下表格所示:
+
+\begin{table}[ht]
+  \centering
+    \begin{tabular}{|*{3}{c|}}
+        \hline
+    Kernel Config    & Single Core  & Multi Core  \\
+        \hline
+    bcm2711\_defconfig  &  171.9    &  533.9 \\  \cline{1-3}
+    myconfig\_1.0       &  122.9    &  308.8 \\  \cline{1-3}
+        \hline
+    \end{tabular}
+  \caption{Unixbench Score - \lstinline{bcm2711_defconfig} vs \lstinline{myconfig_1.0}}
+\end{table}
+
+可以發現經過縮小後的 \lstinline{myconfig_1.0} 在單核和多核的效能都有所下降，
+這是因為我關閉了一些模組和功能所導致，因此我會在下一小節進行改善，
+希望可以在縮小 kernel 的同時提升其效能。
+
+\subsection{Shrink kernel image size - \lstinline{myconfig_2.0}}
+
+為了避免關閉一些模組和功能導致效能下降，我重新檢視了 \lstinline{version_1.0}
+中會影響效能的設定並修正，並且關閉了更多不必要的模組和功能。
+
+首先我修正了以下設定:
+
+\begin{itemize}
+  \item \lstinline{CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE}
+  \item \lstinline{CONFIG_CC_OPTIMIZE_FOR_SIZE}
+\end{itemize}
+
+\lstinline{CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE} 因為使用 \lstinline{gcc -O2} flag，
+會導致 kernel 使用更多的空間，但可以提升 Network Stack、File System 和 Memory Management 
+等方面的效能；而 \lstinline{CONFIG_CC_OPTIMIZE_FOR_SIZE} 則是針對 kernel 的大小進行最佳化，
+但可能會導致效能下降。因此在折衷之下，我選擇了 \lstinline{CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE}
+並尋找其他不必要的模組來縮小 kernel:
+
+\begin{itemize}
+  \item \lstinline{Device drivers}
+  \begin{itemize}
+    \item \lstinline{Amateur Radio support}
+    \item \lstinline{Bluetooth subsystem}
+    \item \lstinline{Remote Controller support}
+    \item \lstinline{Accessibility support}
+    \item \lstinline{Microsoft Surface Platform-Specific Device Drivers}
+    \item \lstinline{Wireless LAN}
+  \end{itemize}
+  \item \lstinline{File systems}
+  \begin{itemize}
+    \item \lstinline{CONFIG_JFS_FS}
+    \item \lstinline{CONFIG_XFS_FS}
+    \item \lstinline{CONFIG_BTRFS_FS}
+    \item \lstinline{CONFIG_HFS_FS}
+    \item \lstinline{CONFIG_HFSPLUS_FS}
+    \item \lstinline{CONFIG_CIFS}
+    \item \lstinline{CONFIG_NFS_FS}
+  \end{itemize}
+\end{itemize}
+
+透過這些設定，\lstinline{myconfig_2.0} 的 kernel 大小為 19MB (19663360 bytes)，
+並在 Unixbench 效能測試中取得單核 175.2 和多核 543.7 的分數，最終整理為下表:
+
+\begin{table}[ht]
+  \centering
+    \begin{tabular}{|*{3}{c|}}
+        \hline
+    Kernel Config    & Kernel Size (bytes)  & Unixbench Score (Single Core / Multi Core)  \\
+        \hline
+    bcm2711\_defconfig  &  23589376    &  171.9 / 533.9 \\  \cline{1-3}
+    myconfig\_1.0       &  19390976    &  122.9 / 308.8 \\  \cline{1-3}
+    myconfig\_2.0       &  19663360    &  175.2 / 543.7 \\  \cline{1-3}
+        \hline
+    \end{tabular}
+  \caption{Kernel Size and Unixbench Score Comparison}
+\end{table}
+
+可以看到經過改善後的 \lstinline{myconfig_2.0} 在 kernel 大小和效能上都有所提升，
+因此我認為這是一個比較好的設定。
+
+\subsection{Discussion}
+
+在 Q1 和 Q2 的實作中，我學習到了如何透過 \lstinline{make menuconfig} 來詳細設定 kernel，
+刪減不必要的模組並縮小 kernel 以便在嵌入式系統中使用，減少不必要的資源浪費；
+另外也學習到了如何使用 Unixbench 來進行系統效能測試，並透過測試結果來改善 kernel 的效能，
+過程中查到許多關乎 kernel 效能的設定，但因為多數設定都已經為 \lstinline{2711_defconfig} 預設，
+且時常遇到改動設定後無法進行編譯或無法開機的問題，因此我認為在改善 kernel 效能上還有很多需要學習的地方。
+
+\section{Q3: Patch your kernel to support real-time tasks.}
+
+在 Q3 中，我使用了 \lstinline{kernel 4.18.20} 並透過 \lstinline{patch-4.18.12-rt7} 
+來支援 real-time tasks，首先將 patch 檔案放置在 kernel 的根目錄下並執行以下指令:
+
+\begin{lstlisting}[firstnumber=1]{language=bash}
+  $ cat patch-4.18.12-rt7 | patch -p1
+\end{lstlisting}
+
+因為 kernel 版本和 Q1、Q2 不同，沒有 \lstinline{2711_defconfig} 設定檔，
+因此要先進入 \lstinline{linux/arch/arm64/configs} 尋找可作為預設的設定檔生成 \lstinline{.config}
+(我使用的是 \lstinline{bcmrpi3_defconfig})，接著 \lstinline{make menuconfig} 開啟 
+\lstinline{Peemption Model} > \lstinline{Fully Preemptible Kernel (RT)} 選項，
+並進行編譯，我在編譯過程中有遇到 \lstinline{multiple definition of `yylloc`}的報錯，
+透過查找 \href{https://blog.csdn.net/u011781073/article/details/123773085}{網路上的解決方法}
+後將 \lstinline{yylloc} 定義的地方加上 \lstinline{extern} ，即可順利編譯完成。
+
+燒錄到 SD 卡後，我使用了 \lstinline{uname -a} 來確認 kernel 版本和是否支援 real-time tasks:
+
+\begin{lstlisting}[firstnumber=1]{language=bash}
+  $ uname -a
+  Linux raspberrypi 4.18.20-rt7-v8+ #1 SMP PREEMPT RT Wed Oct 2 20:46:53 CST 2024 aarch64 GNU/Linux
+\end{lstlisting}
+
+可以看到 kernel 版本為 \lstinline{4.18.20-rt7} 並支援 real-time tasks。
+
+\endgroup
+
+\section{References}
+
+\begin{enumerate}
+  \item \href{https://elinux.org/Kernel_Size_Tuning_Guide}{Kernel Size Tuning Guide}
+  \item \href{https://elinux.org/Linux_Tiny}{Linux-tiny}
+  \item \href{https://github.com/kdlucas/byte-unixbench}{byte-unixbench}
+  \item \href{https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/}{linux kernel rt patch}
+  \item \href{https://blog.csdn.net/u011781073/article/details/123773085}{編譯linux內核時multiple definition of `yylloc` 錯誤的解決方案}
+  \item \href{https://hackmd.io/@oscarshiang/peempt_rt_raspi}{編譯 PREEMPT\_RT 核心與安裝}
+  \item \href{https://medium.com/@patdhlk/realtime-linux-e97628b51d5d}{Realtime Linux}
+  \item \href{https://stackoverflow.com/questions/51837675/what-are-the-differences-between-make-clean-make-clobber-make-distclean-make}{What are the differences between make clean, make clobber, make distclean, make mrproper and make realclean?}
+\end{enumerate}
+
+\end{document}
